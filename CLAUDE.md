@@ -15,15 +15,21 @@ No test suite is configured.
 
 ## Architecture
 
-This is a single-file React app — all logic lives in `src/App.jsx` with styles in `src/App.css`. There are no sub-components, no routing, and no backend; state is in-memory only (resets on page refresh).
+This is a React + Vite app with no routing, no backend, and no persistence — all state is in-memory and resets on page refresh.
 
-### Known bugs (intentional — part of the course)
+### Component structure
 
-- `amount` is stored as a string, not a number. The `reduce` calls for `totalIncome` and `totalExpenses` use string concatenation instead of numeric addition, so the summary totals are wrong.
-- Transaction #4 ("Freelance Work") is typed as `"expense"` but categorized as `"salary"` — inconsistent seed data.
+- **`App`** (`src/App.jsx`) — root component, holds the `transactions` array in state and passes it down
+- **`Summary`** (`src/Summary.jsx`) — receives `transactions`, computes and displays total income, expenses, and balance
+- **`TransactionForm`** (`src/TransactionForm.jsx`) — owns its own form state (description, amount, type, category), calls `onAdd(transaction)` prop on submit
+- **`TransactionList`** (`src/TransactionList.jsx`) — receives `transactions`, owns its own filter state (filterType, filterCategory), renders the filtered table
 
-### State shape
+### Transaction shape
 
-Each transaction: `{ id, description, amount (string), type ("income"|"expense"), category, date (YYYY-MM-DD) }`.
+```js
+{ id, description, amount (number), type ("income" | "expense"), category, date ("YYYY-MM-DD") }
+```
 
-Filter state (`filterType`, `filterCategory`) is derived in the render path — no memoization.
+### Shared constants
+
+`categories` array is defined locally in both `TransactionForm` and `TransactionList` — not yet extracted to a shared file.
