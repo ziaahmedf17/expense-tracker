@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 const categories = ["food", "housing", "utilities", "transport", "entertainment", "salary", "other"];
 
-function TransactionList({ transactions }) {
+function TransactionList({ transactions, onDelete }) {
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
 
@@ -38,6 +38,7 @@ function TransactionList({ transactions }) {
             <th>Description</th>
             <th>Category</th>
             <th>Amount</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -48,6 +49,16 @@ function TransactionList({ transactions }) {
               <td>{t.category}</td>
               <td className={t.type === "income" ? "income-amount" : "expense-amount"}>
                 {t.type === "income" ? "+" : "-"}${t.amount}
+              </td>
+              <td>
+                <button className="delete-btn" onClick={() => { if (window.confirm('Delete this transaction?')) onDelete(t.id); }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14H6L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4h6v2" />
+                  </svg>
+                </button>
               </td>
             </tr>
           ))}
